@@ -16,6 +16,7 @@ import {
 import { AsyncNgrok } from './AsyncNgrok';
 import { DevelopmentSession } from './DevelopmentSession';
 import { CreateURLOptions, UrlCreator } from './UrlCreator';
+import DevToolsPluginManager from './devtools/DevToolsPluginManager';
 import { PlatformBundlers } from './platformBundlers';
 
 const debug = require('debug')('expo:start:server:devServer') as typeof console.log;
@@ -112,6 +113,7 @@ export abstract class BundlerDevServer {
     public projectRoot: string,
     /** A mapping of bundlers to platforms. */
     public platformBundlers: PlatformBundlers,
+    protected readonly devToolsPluginManager: DevToolsPluginManager,
     // TODO: Replace with custom scheme maybe...
     public isDevClient?: boolean
   ) {}

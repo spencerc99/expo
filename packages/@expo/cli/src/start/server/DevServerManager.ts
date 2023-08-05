@@ -12,6 +12,7 @@ import { printItem } from '../interface/commandsTable';
 import * as AndroidDebugBridge from '../platforms/android/adb';
 import { resolveSchemeAsync } from '../resolveOptions';
 import { BundlerDevServer, BundlerStartOptions } from './BundlerDevServer';
+import DevToolsPluginManager from './devtools/DevToolsPluginManager';
 import { getPlatformBundlers } from './platformBundlers';
 
 const debug = require('debug')('expo:start:server:devServerManager') as typeof console.log;
@@ -35,6 +36,7 @@ const BUNDLERS = {
 /** Manages interacting with multiple dev servers. */
 export class DevServerManager {
   private projectPrerequisites: ProjectPrerequisite<any, void>[] = [];
+  public readonly devtoolsPluginManager: DevToolsPluginManager;
 
   private notifier: FileNotifier | null = null;
 
@@ -44,6 +46,7 @@ export class DevServerManager {
     public options: BundlerStartOptions
   ) {
     this.notifier = this.watchBabelConfig();
+    this.devtoolsPluginManager = new DevToolsPluginManager(projectRoot);
   }
 
   private watchBabelConfig() {
@@ -169,6 +172,7 @@ export class DevServerManager {
       const server = new BundlerDevServerClass(
         this.projectRoot,
         platformBundlers,
+        this.devtoolsPluginManager,
         !!options?.devClient
       );
       await server.startAsync(options ?? this.options);

@@ -1,6 +1,6 @@
 import { ExpoModuleConfig } from './ExpoModuleConfig';
 
-export type SupportedPlatform = 'ios' | 'android' | 'web';
+export type SupportedPlatform = 'ios' | 'android' | 'web' | 'devtools';
 
 export interface SearchOptions {
   // Available in the CLI
@@ -73,7 +73,16 @@ export interface ModuleDescriptorIos {
   debugOnly: boolean;
 }
 
-export type ModuleDescriptor = ModuleDescriptorAndroid | ModuleDescriptorIos;
+export interface ModuleDescriptorDevTools {
+  packageName: string;
+  packageRoot: string;
+  webpageRoot: string;
+}
+
+export type ModuleDescriptor =
+  | ModuleDescriptorAndroid
+  | ModuleDescriptorIos
+  | ModuleDescriptorDevTools;
 
 export interface AndroidGradlePluginDescriptor {
   /**
@@ -170,5 +179,15 @@ export interface RawExpoModuleConfig {
      * Gradle plugins.
      */
     gradlePlugins?: AndroidGradlePluginDescriptor[];
+  };
+
+  /**
+   * DevTools-specific config.
+   */
+  devtools?: {
+    /**
+     * The webpage root directory for Expo CLI DevTools to serve the web resources.
+     */
+    webpageRoot: string;
   };
 }
